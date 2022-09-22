@@ -1,0 +1,255 @@
+Q1.Make a pair plot on Readmission Registry table & do u see any correlation between columns values.
+import pandas as pd
+import numpy as np
+df = pd.read_excel("HospitalDatabase .xlsx",sheet_name="ReAdmissionRegistry")
+import seaborn as sns
+import matplotlib.pyplot as plt
+sns.pairplot(df,hue="PrimaryDiagnosis")
+plt.show()
+
+Q2 Using iloc, retrieve the firstname and lastname of patients between indices 101 and 200.
+import pandas as pd
+dataset = pd.read_excel("HospitalDatabase .xlsx",sheet_name="Patients")
+import numpy as np
+import matplotlib.pyplot as plt
+print(dataset.iloc[101:201,1:3])
+
+Q9Get the list of patient ID's which are not there in ReadmissionRegistry.
+import pandas as pd
+df=pd.read_excel("HospitalDatabase .xlsx",'ReAdmissionRegistry')
+df=df['PatientID']
+df1=pd.read_excel("HospitalDatabase .xlsx",'Patients')
+df1=df1['PatientID']
+df1[~df1.isin(df)].dropna()
+
+Q10 Create a boxplot on ExpectedLOS by taking service into account.
+import pandas as pd
+dataset = pd.read_excel("HospitalDatabase .xlsx",sheet_name="Discharges")
+import seaborn as sns
+import matplotlib.pyplot as plt
+sns.boxplot(x=dataset["ExpectedLOS"],y=dataset["Service"])
+plt.show()
+
+Q17Create a heat map to show the correlation between the column values of Edvisits.
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
+  
+# import file with data
+data=pd.read_excel("HospitalDatabase .xlsx",sheet_name="EDVisits")
+  
+# plotting correlation heatmap
+dataplot=sns.heatmap(data.corr())
+  
+# displaying heatmap
+plt.show()
+
+Q18Add column 'Age' in Patient table.
+CODE:
+from datetime import datetime, date
+
+import pandas as pd
+data = pd.read_excel("HospitalDatabase .xlsx ", "Patients",)
+data['dob'] = pd.to_datetime(data.DateOfBirth)
+"data['dob']\n",
+
+def age(born):
+    today = date.today()
+    return today.year - born.year - ((today.month, 
+                                      today.day) < (born.month, 
+                                                   born.day))
+
+data['Age'] = data['dob'].apply(age)
+print(data)
+
+Q25
+Plot a graph by counting the no. of patients in each department.
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+df=pd.read_excel("HospitalDatabase .xlsx",sheet_name="AmbulatoryVisits")
+df1 = df.groupby(['VisitDepartmentID']).size()
+df1.plot.bar()
+
+Q26 Using arrays and loops, find the count of patients based on gender.
+
+import pandas as pd
+df=pd.read_excel("HospitalDatabase .xlsx",'Patients')
+count=int(len(df))
+k=0
+male_count=0
+female_count=0
+while(k<count):
+    if(df['Gender'].iat[k]=="Male"):
+        male_count+=1
+    else:
+        female_count+=1
+            
+    k+=1
+    print("Male:",male_count,"\n","Female:",female_count)
+
+Q33 Using a bar chart, which Service had the lowest count of Expected Mortality?
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+df=pd.read_excel("HospitalDatabase .xlsx",sheet_name="Discharges")
+plt.bar(df['Service'],df['ExpectedMortality'])
+plt.title('service vs ExpectedMortality')
+plt.xlabel('Service')
+plt.ylabel('ExpectedMortality')
+plt.show()
+
+
+Q34 np.arange(1,31).reshape(6,5) Find the array slicing to get the elements with values 11,12,16,17.
+CODE:
+import numpy as np
+a = np.arange(1,31)
+a_6_5 = a.reshape([6,5])
+
+print(a_6_5)
+print( str(a_6_5[2,0]) + " ," + str(a_6_5[2,1])+ "," + str(a_6_5[3,0]) + "," + str(a_6_5[3,1]))
+
+Q41 Find the visit type with maximum 'No Show'.
+import pandas as pd
+import numpy as np
+df=pd.read_excel("HospitalDatabase .xlsx",sheet_name="AmbulatoryVisits")
+df1=df.groupby('VisitStatus')
+df2=df1.get_group('No Show').max()
+print(df2['VisitType'])
+
+
+Q42 Using loc , get the details of the providers where providerId is between 11 and 20 and ProviderSpecialty is Surgery.
+import pandas as pd
+df= pd.read_excel('HospitalDatabase .xlsx','Providers')
+ProviderID= df["ProviderID"].unique()
+columns='Provider'
+count=int(len("ProviderSpecialty"))
+i=10
+while (i <count ):
+    df1=df.loc[(df["ProviderSpecialty"] == "Surgery") & (df["ProviderID"] ==  ProviderID[i])]
+    print(df1)
+    i+=1
+		
+Q49  Retrieve the rows where SBP<140 and DBP<80.
+CODE:
+import pandas as pd
+data=pd.read_excel("HospitalDatabase .xlsx",sheet_name="AmbulatoryVisits")
+Max_BP_SYS = 140
+Max_BP_DIA = 80
+
+for ind in data.index:
+    New_BP_SYS=data['BloodPressureSystolic'][ind]
+    New_BP_DIA=data['BloodPressureDiastolic'][ind]
+    if New_BP_SYS < Max_BP_SYS :
+        Max_BP_SYS = New_BP_SYS 
+data1=data.loc[(data['BloodPressureSystolic'] == Max_BP_SYS)]
+if  New_BP_DIA < Max_BP_DIA :
+    Max_BP_DIA = New_BP_DIA   
+data2=data.loc[(data['BloodPressureDiastolic']==Max_BP_DIA)]
+print(data1,data2)
+
+
+Q50 Which departmentID has maximum number of visits scheduled.
+import pandas as pd
+import numpy as np
+df = pd.read_excel("HospitalDatabase .xlsx",sheet_name="AmbulatoryVisits")
+df1 = df.groupby(['VisitDepartmentID']).size()
+df2 = max(df1)
+print(df1)
+
+Q57 Find the age prone to get stroke.
+CODE:
+import pandas as pd
+from datetime import datetime, date
+df2 = pd.read_excel('HospitalDatabase .xlsx','Patients' )
+df2['dob'] = pd.to_datetime(df2.DateOfBirth)
+"data['dob']\n",
+
+def age(born):
+    today = date.today()
+    return today.year - born.year - ((today.month,
+                  today.day) < (born.month,
+                                 born.day))
+
+df2['Age'] = df2['dob'].apply(age)
+
+df1 = pd.read_excel('HospitalDatabase .xlsx','Discharges' )
+
+df = df1.merge(df2,on="PatientID")
+
+df3=df.loc[(df['PrimaryDiagnosis'] == 'Stroke')]
+df3['Age'].value_counts()
+
+Q58  Display total count of patients service wise based on gender.
+CODE:
+import pandas as pd
+df1 = pd.read_excel('HospitalDatabase .xlsx','Discharges' )
+df2 = pd.read_excel('HospitalDatabase .xlsx','Patients' )
+df = df1.merge(df2,on="PatientID")
+df[['Service','Gender']].value_counts().reset_index(name='Counts')
+
+Q64
+Using numpy functions, multiply the following arrays
+a=np.arange(6).reshape(2,3)
+b=np.arange(6).reshape(3,2)
+CODE:
+import pandas as pd
+import numpy as np
+a = np.arange(6).reshape((2, 3))
+b = np.arange(6).reshape((3,2))
+print(np.dot
+(a, b))
+
+
+Q65
+Get the  number of patients based on service and primary diagnosis.
+CODE:
+import pandas as pd
+import numpy as np
+df = pd.read_excel("HospitalDatabase .xlsx",sheet_name="Discharges")
+df1 = df.groupby(['Service']).size()
+df2 = df.groupby(['PrimaryDiagnosis']).size()
+print(df1,df2)
+
+Q73 Delete the column 'DischargeDispostion' iteratively.
+CODE:
+import pandas as pd
+df=pd.read_excel("HospitalDatabase .xlsx",'Discharges')
+del df['DischargeDisposition']
+print(df)
+
+
+Q74 Get the list of ReasonForVisit.
+#74 get the list of reason for visit
+import numpy as np
+import pandas as pd
+df=pd.read_excel("HospitalDatabase .xlsx",sheet_name="EDUnique")
+ReasonForVisit_list=list(df['ReasonForVisit'])
+ReasonForVisit_list=list(dict.fromkeys(ReasonForVisit_list))
+print(ReasonForVisit_list)     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
